@@ -8,6 +8,7 @@ def display_row():
     ax.clear()
     current_data = domain_counts_df.iloc[index]
     current_data = current_data.dropna()
+    current_data = current_data.sort_values(ascending=False)
     ax.pie(current_data, labels=current_data.index)
     ax.set_title(current_data.name)
     fig.canvas.draw()
@@ -29,6 +30,9 @@ df.columns = ['url', 'full domain', 'top domain', 'random number', 'datetime', '
 df['datetime'] = pd.to_datetime(df['datetime']).dt.date
 
 dates = df.loc[:, 'datetime'].unique()
+print(dates)
+dates.sort()
+print(dates)
 
 domain_counts_df = pd.DataFrame()
 
