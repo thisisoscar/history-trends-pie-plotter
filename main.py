@@ -30,9 +30,7 @@ df.columns = ['url', 'full domain', 'top domain', 'random number', 'datetime', '
 df['datetime'] = pd.to_datetime(df['datetime']).dt.date
 
 dates = df.loc[:, 'datetime'].unique()
-print(dates)
 dates.sort()
-print(dates)
 
 domain_counts_df = pd.DataFrame()
 
