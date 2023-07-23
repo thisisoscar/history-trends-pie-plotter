@@ -16,12 +16,12 @@ def display_row():
 
 def next_row(event):
     global index 
-    index = (index + 1) % len(dates)
+    index = (index + 1) % len(domain_counts_df.index)
     display_row()
 
 def prev_row(event):
     global index 
-    index = (index - 1) % len(dates)
+    index = (index - 1) % len(domain_counts_df.index)
     display_row()
 
 
@@ -30,24 +30,25 @@ df.columns = ['url', 'full domain', 'top domain', 'random number', 'datetime', '
 df['datetime'] = pd.to_datetime(df['datetime']).dt.date
 
 dates = df.loc[:, 'datetime'].unique()
-dates.sort()
+dates[::-1].sort()
 
 domain_counts_df = pd.DataFrame()
 
-for i in dates:
-    data = {}
+domain_counts = df.loc[:, 'top domain'].value_counts()
+domain_counts.name = 'all time'
+domain_counts = domain_counts.rename(lambda x: f'{x}\n({domain_counts[x]})')
+domain_counts_df = pd.concat([domain_counts_df, domain_counts.to_frame().T])
 
+for i in dates:
     target_date = pd.to_datetime(i).date()
     filtered_df = df[df['datetime'] == target_date]
     filtered_df = filtered_df.loc[:, ['top domain']]
 
     domain_counts = filtered_df['top domain'].value_counts()
-
     domain_counts.name = i
-
+    domain_counts = domain_counts.rename(lambda x: f'{x}\n({domain_counts[x]})')
     domain_counts_df = pd.concat([domain_counts_df, domain_counts.to_frame().T])
 
-#domain_counts_df = domain_counts_df.fillna(0.0)
 
 index = 0
 
